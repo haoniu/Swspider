@@ -9,6 +9,8 @@
 #     https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
+import os
+
 BOT_NAME = 'SwSpider'
 
 SPIDER_MODULES = ['SwSpider.spiders']
@@ -64,10 +66,20 @@ ROBOTSTXT_OBEY = False
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'SwSpider.pipelines.SwspiderPipeline': 300,
-#}
+# 数字代表处理的顺序
+ITEM_PIPELINES = {
+    'SwSpider.pipelines.MysqlTwistedPipline': 2,
+    #'SwSpider.pipelines.MysqlPipeline': 2,
+    #'SwSpider.pipelines.JsonWithEncodingPipeline': 2,
+    #'SwSpider.pipelines.SwspiderPipeline': 300,
+    'SwSpider.pipelines.ArticleImagesPipeline':  1,
+}
+IMAGES_URLS_FIELD = "front_image_url"
+project_path = os.path.abspath(os.path.dirname(__file__))
+IMAGES_STORE = os.path.join(project_path,'images')
 
+# IMAGES_MIN_HEIGHT = 100
+# IMAGES_MIN_WIDTH = 100
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
 #AUTOTHROTTLE_ENABLED = True
@@ -88,3 +100,8 @@ ROBOTSTXT_OBEY = False
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+MYSQL_HOST = "127.0.0.1"
+MYSQL_DBNAME = "swspider"
+MYSQL_USER = "root"
+MYSQL_PASSWORD = "root"
